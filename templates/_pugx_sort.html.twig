@@ -1,0 +1,18 @@
+{%- macro sort(route, name, field) %}
+    {%- set sort = app.request.session.get('filter_sort.' ~ name) -%}
+    {%- if sort and sort.field == field -%}
+        {%- if sort.direction == 'DESC' -%}
+            <a href="{{ path(route, {field: field, direction: 'ASC'}) }}" class="pull-right hidden-print">
+                <i class="fa fa-sort-down"></i>
+            </a>
+        {%- elseif sort.direction == 'ASC' -%}
+            <a href="{{ path(route, {field: field, direction: 'DESC'}) }}" class="pull-right hidden-print">
+                <i class="fa fa-sort-up"></i>
+            </a>
+        {%- endif -%}
+    {%- else -%}
+        <a href="{{ path(route, {field: field}) }}" class="pull-right text-muted hidden-print">
+            <i class="fa fa-sort"></i>
+        </a>
+    {%- endif -%}
+{% endmacro -%}

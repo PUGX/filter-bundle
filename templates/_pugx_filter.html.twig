@@ -1,0 +1,16 @@
+<button type="button" class="btn btn-default filter hidden-print" data-toggle="collapse" data-target="#filter">
+    {{ 'show_hide'|trans({}, 'filter') }} <i class="fa fa-angle-{{ filter_has(name) ? 'right' : 'down' }}"></i>
+</button>
+<div id="filter" class="hidden-print collapse{% if filter_has(name) %} in{% endif %}">
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <p class="btn-group pull-right">
+            <button class="btn btn-primary" type="submit" name="submit-filter">
+                <i class="fa fa-filter"></i> {{ 'filter'|trans({}, 'filter') }}
+            </button>
+            <a class="btn btn-default" href="?reset-filter">
+                <i class="fa fa-times"></i> {{ 'reset'|trans({}, 'filter') }}
+            </a>
+        </p>
+    {{ form_end(form) }}
+</div>

@@ -1,0 +1,38 @@
+{
+    "name": "pugx/filter-bundle",
+    "type": "symfony-bundle",
+    "description": "Utility for filtering/sorting with Symfony",
+    "keywords": ["Symfony", "form", "filter"],
+    "license": "LGPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Massimiliano Arione",
+            "email": "garakkio@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "symfony/config": "^3.4 || ^4.3 || ^5.0",
+        "symfony/dependency-injection": "^3.4 || ^4.3 || ^5.0",
+        "symfony/form": "^3.4 || ^4.3 || ^5.0",
+        "symfony/http-kernel": "^3.4 || ^4.3 || ^5.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.4"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "PUGX\\FilterBundle\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PUGX\\FilterBundle\\Tests\\": "tests"
+        }
+    }
+}
