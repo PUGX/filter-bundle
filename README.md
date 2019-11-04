@@ -61,9 +61,89 @@ class FooController extends AbstractController
 Form Example
 ------------
 
-This part of documentation still needs to be covered... TODO
+```php
+<?php
+
+class MyFilterType extends AbstractType
+{
+   public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('name', Type\TextType::class, ['required' => false])
+            ->add('email', Type\TextType::class, ['required' => false])
+        ;
+    }
+
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'csrf_protection' => false,
+            'method' => 'GET',
+        ]);
+    }
+}
+
+```
 
 Sorting
 -------
 
-This part of documentation still needs to be covered... TODO
+You can use provided Twig extension for column sorting functionality.
+
+Example of template:
+
+```twig
+{% from '_pugx_sort.html.twig' import sort -%}
+
+{% block body %}
+    {% include '_pugx_filter.html.twig' with {name: 'coach'} %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Name {{ sort('my_sorting_route', 'foo', 'name') }} </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for foo in foos %}
+                {# same as above... #}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+```
+
+You need to provide a route/action to perform sorting, using `$filter->sort('utente', $field, $direction)`.
+
+Then, you'll find an addtional value inside your filter array, like this:
+
+```php
+$filters = [
+    '_sort' => [
+        'field' => 'name',
+        'direction' => 'ASC',
+    ]
+];
+```
+
+You can use this value to perform your sorting (again, this is up to you and it depends on your domain logic).
+
+
+Translation
+-----------
+
+Translations are available (for now, only for English/French/Italian).
+
+If you're using Symfony 4.4+, translatons should be automatically discovered.
+
+On older Symfonyi versions, add this to your configuration:
+
+```yaml
+# config/packages/translation.yaml
+framework:
+    translator:
+        paths:
+            - '%kernel.project_dir%/translations/'  # this line should be already present
+            - '%kernel.project_dir%/vendor/pugx/filter-bundle/translations/' # add this line
+
+```

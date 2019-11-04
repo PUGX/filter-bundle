@@ -5,10 +5,10 @@
     {{ form_start(form) }}
         {{ form_widget(form) }}
         <p class="btn-group pull-right">
-            <button class="btn btn-primary" type="submit" name="submit-filter">
+            <button class="btn btn-primary" type="submit" name="submit-filter" data-filter>
                 <i class="fa fa-filter"></i> {{ 'filter'|trans({}, 'filter') }}
             </button>
-            <a class="btn btn-default" href="?reset-filter">
+            <a class="btn btn-default" href="?reset-filter" data-reset-filter>
                 <i class="fa fa-times"></i> {{ 'reset'|trans({}, 'filter') }}
             </a>
         </p>
