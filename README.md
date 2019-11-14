@@ -1,6 +1,9 @@
 PUGX FilterBundle
 =================
 
+[![Total Downloads](https://poser.pugx.org/pugx/filter-bundle/downloads.png)](https://packagist.org/packages/pugx/filter-bundle)
+[![Build Status](https://travis-ci.org/PUGX/filter-bundle.png?branch=master)](https://travis-ci.org/PUGX/filter-bundle)
+
 The purpose of this bundle is providing a way to get some filters, that stay in session, to
 be able to use them when displaying a list of items. It also supports sorting.
 
