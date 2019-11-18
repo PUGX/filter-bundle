@@ -139,7 +139,7 @@ Translations are available (for now, only for English/French/Italian).
 
 If you're using Symfony 4.4+, translatons should be automatically discovered.
 
-On older Symfonyi versions, add this to your configuration:
+On older Symfony versions, add this to your configuration:
 
 ```yaml
 # config/packages/translation.yaml
