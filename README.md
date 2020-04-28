@@ -52,7 +52,7 @@ class FooController extends AbstractController
 
 
 ```twig
-{# this will display your form #} 
+{# this will display your form. Use '_pugx_filter_b4.html.twig' for Bootstrap 4 #} 
 {% include '_pugx_filter.html.twig' with {name: 'foo'} %}
 
 {% for foo in foos %}
@@ -97,6 +97,7 @@ You can use provided Twig extension for column sorting functionality.
 Example of template:
 
 ```twig
+{# Use '_pugx_sort_b4.html.twig' for Bootstrap 4 #} 
 {% from '_pugx_sort.html.twig' import sort -%}
 
 {% block body %}
