@@ -7,6 +7,13 @@ PUGX FilterBundle
 The purpose of this bundle is providing a way to get some filters, that stay in session, to
 be able to use them when displaying a list of items. It also supports sorting.
 
+* [Setup](#Setup)
+* [Basic Usage](#basic-usage)
+* [Form Example](#form-example)
+* [Sorting](#sorting)
+* [Translation](#translation)
+* [JavaScript](#javascript)
+
 Setup
 -----
 
@@ -58,7 +65,6 @@ class FooController extends AbstractController
 {% for foo in foos %}
     {# here you can display your list of filtered items, as long as you did your homework #}
 {% endfor %}
-
 ```
 
 Form Example
@@ -151,3 +157,34 @@ framework:
             - '%kernel.project_dir%/vendor/pugx/filter-bundle/translations/' # add this line
 
 ```
+
+JavaScript
+----------
+
+A jQuery helper is provided, to enhance UX.
+You can use it like in the following example:
+
+```js
+// assets/js/app.js
+import '../../vendor/pugx/filter-bundle/assets/js/filter';
+
+$(document).ready(function () {
+    'use strict';
+
+    if (jQuery().pugxFilter) {
+        $('#filter').pugxFilter();
+    }
+});
+
+```
+
+The basic results will be that icon in the toggle button will be toggled along,
+and the arrow will point to right when filters are shown (and back to bottom when
+filters are collapsed).
+
+You can pass an option object to `pugxFilter` function.
+
+Currently supported options are:
+
+* `callbackHide` a callback to be used when filters are collapsed
+* `callbackShow` a callback to be used when filters are shown
