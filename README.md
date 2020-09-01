@@ -49,7 +49,7 @@ class FooController extends AbstractController
         $foos = $repository->getList($filter->filter('foo'));
 
         return $this->render('foo/item_list.html.twig', [
-            'form' => $filter->getFormView('utente'),
+            'form' => $filter->getFormView('foo'),
             'foos' => $foos,
         ]);
     }
@@ -123,7 +123,7 @@ Example of template:
 {% endblock %}
 ```
 
-You need to provide a route/action to perform sorting, using `$filter->sort('utente', $field, $direction)`.
+You need to provide a route/action to perform sorting, using `$filter->sort('foo', $field, $direction)`.
 
 Then, you'll find an addtional value inside your filter array, like this:
 
