@@ -28,7 +28,7 @@ final class Filter
     }
 
     /**
-     * Perform actual filtering. You need to pass ad identifing name.
+     * Perform actual filtering. You need to pass ad identifying name.
      * You'll get an array with name of fields in keys and filtered values in values
      * (except for "_sort" key, that holds info for sorting).
      */
@@ -36,10 +36,12 @@ final class Filter
     {
         $filter = [];
         $values = $this->getSession()->get('filter.'.$name);
-        if (null !== $values && $this->forms[$name]->submit($values)->isValid()) {
-            $filter = \array_filter($values, static function ($value) {
-                return '' !== $value;
-            });
+        if (null !== $values) {
+            if ($this->forms[$name]->isSubmitted() || $this->forms[$name]->submit($values)->isValid()) {
+                $filter = \array_filter($values, static function ($value) {
+                    return '' !== $value;
+                });
+            }
         }
         if ([] !== ($sort = $this->getSort($name))) {
             $filter['_sort'] = $sort;
