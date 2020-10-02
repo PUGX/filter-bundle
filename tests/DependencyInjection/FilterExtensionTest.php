@@ -14,15 +14,15 @@ final class FilterExtensionTest extends TestCase
         $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
         $extension = new FilterExtension();
         $extension->load([], $container);
-        $this->assertTrue(true);
+        self::assertTrue(true);
     }
 
     public function testPrependWithoutTwig(): void
     {
         /** @var ContainerBuilder&\PHPUnit\Framework\MockObject\MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
-        $container->expects($this->once())->method('hasExtension')->willReturn(false);
-        $container->expects($this->never())->method('prependExtensionConfig')->willReturn(true);
+        $container->expects(self::once())->method('hasExtension')->willReturn(false);
+        $container->expects(self::never())->method('prependExtensionConfig')->willReturn(true);
         $extension = new FilterExtension();
         $extension->prepend($container);
     }
@@ -31,8 +31,8 @@ final class FilterExtensionTest extends TestCase
     {
         /** @var ContainerBuilder&\PHPUnit\Framework\MockObject\MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
-        $container->expects($this->once())->method('hasExtension')->willReturn(true);
-        $container->expects($this->once())->method('prependExtensionConfig')->willReturn(true);
+        $container->expects(self::once())->method('hasExtension')->willReturn(true);
+        $container->expects(self::once())->method('prependExtensionConfig')->willReturn(true);
         $extension = new FilterExtension();
         $extension->prepend($container);
     }
