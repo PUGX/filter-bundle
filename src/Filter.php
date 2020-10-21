@@ -35,10 +35,11 @@ final class Filter
     public function filter(string $name): array
     {
         $filter = [];
+        $fname = $name.$this->getSession()->getId();
         $values = $this->getSession()->get('filter.'.$name);
         if (null !== $values) {
-            if ($this->forms[$name]->isSubmitted() || $this->forms[$name]->submit($values)->isValid()) {
-                $filter = \array_filter($values, static function ($value) {
+            if ($this->forms[$fname]->isSubmitted() || $this->forms[$fname]->submit($values)->isValid()) {
+                $filter = \array_filter($values, static function ($value): bool {
                     return '' !== $value;
                 });
             }
@@ -55,6 +56,8 @@ final class Filter
      */
     public function getFormData(string $name, string $field)
     {
+        $name .= $this->getSession()->getId();
+
         return $this->forms[$name]->getData()[$field];
     }
 
@@ -63,6 +66,8 @@ final class Filter
      */
     public function getFormView(string $name): FormView
     {
+        $name .= $this->getSession()->getId();
+
         return $this->forms[$name]->createView();
     }
 
@@ -72,7 +77,8 @@ final class Filter
      */
     public function saveFilter(string $formName, string $name, array $defaults = []): bool
     {
-        $this->forms[$name] = $this->formFactory->create($formName);
+        $fname = $name.$this->getSession()->getId();
+        $this->forms[$fname] = $this->formFactory->create($formName);
         if ($this->getRequest()->query->has('reset-filter')) {
             $this->getSession()->set('filter.'.$name, null);
 
@@ -86,9 +92,9 @@ final class Filter
         if (!$this->getRequest()->query->has('submit-filter')) {
             return false;
         }
-        $this->forms[$name]->handleRequest($this->getRequest());
-        if ($this->forms[$name]->isSubmitted() && $this->forms[$name]->isValid()) {
-            $this->getSession()->set('filter.'.$name, $this->getRequest()->query->get($this->forms[$name]->getName()));
+        $this->forms[$fname]->handleRequest($this->getRequest());
+        if ($this->forms[$fname]->isSubmitted() && $this->forms[$fname]->isValid()) {
+            $this->getSession()->set('filter.'.$name, $this->getRequest()->query->get($this->forms[$fname]->getName()));
 
             return true;
         }
