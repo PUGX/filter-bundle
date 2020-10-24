@@ -10,4 +10,7 @@
             <directory>src</directory>
         </whitelist>
     </filter>
+    <extensions>
+        <extension class="PUGX\FilterBundle\Tests\BypassFinalHook"/>
+    </extensions>
 </phpunit>

@@ -13,6 +13,7 @@ be able to use them when displaying a list of items. It also supports sorting.
 * [Sorting](#sorting)
 * [Translation](#translation)
 * [JavaScript](#javascript)
+* [Helpers](#helpers)
 
 Setup
 -----
@@ -188,3 +189,13 @@ Currently supported options are:
 
 * `callbackHide` a callback to be used when filters are collapsed
 * `callbackShow` a callback to be used when filters are shown
+
+Helpers
+-------
+
+Following helper functions are available as functions in twig templates:
+
+* `filter_has`: tells if a filter is enabled (e.g. if a session for filter exists)
+* `filter_is`: tells if a filter field is selected
+* `filter_is_not`: tells if a filter field is not selected
+
