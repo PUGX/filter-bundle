@@ -11,7 +11,8 @@ final class FilterRuntime implements RuntimeExtensionInterface
     /** @var SessionInterface */
     private $session;
 
-    private PFilter $filter;
+    /** @var PFilter */
+    private $filter;
 
     public function __construct(SessionInterface $session, PFilter $filter)
     {
