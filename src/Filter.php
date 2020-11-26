@@ -88,7 +88,7 @@ final class Filter
         }
         $this->forms[$name]->handleRequest($this->getRequest());
         if ($this->forms[$name]->isSubmitted() && $this->forms[$name]->isValid()) {
-            $this->getSession()->set('filter.'.$name, $this->getRequest()->query->all($this->forms[$name]->getName()));
+            $this->getSession()->set('filter.'.$name, $this->getRequest()->query->all()[$this->forms[$name]->getName()]);
 
             return true;
         }
