@@ -163,11 +163,21 @@ JavaScript
 ----------
 
 A jQuery helper is provided, to enhance UX.
-You can use it like in the following example:
+You can use it by requiring the following line in your package.json file:
+
+```json
+{
+    "dependencies": {
+        "@pugx/filter-bundle": "file:vendor/pugx/filter-bundle/assets"
+    }
+}
+```
+
+Then you can do something like the following:
 
 ```js
 // assets/js/app.js
-import '../../vendor/pugx/filter-bundle/assets/js/filter';
+import '@pugx/filter-bundle/js/filter';
 
 $(document).ready(function () {
     'use strict';
