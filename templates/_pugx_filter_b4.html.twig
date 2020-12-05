@@ -4,7 +4,7 @@
 <div id="filter" class="d-print-none collapse{% if filter_has(name) %} show{% endif %}">
     {{ form_start(form) }}
         {{ form_widget(form) }}
-        <p class="btn-group pull-right">
+        <p class="btn-group float-right">
             <button class="btn btn-primary" type="submit" name="submit-filter" data-filter>
                 <i class="fa fa-filter"></i> {{ 'filter'|trans({}, 'filter') }}
             </button>
