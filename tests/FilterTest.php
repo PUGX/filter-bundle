@@ -59,6 +59,13 @@ final class FilterTest extends TestCase
         self::assertEquals($view, $formView);
     }
 
+    public function testFormViewException(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Cannot find form. Did you call saveFilter() before?');
+        $this->filter->getFormView('foo');
+    }
+
     public function testSort(): void
     {
         $this->filter->sort('foo', 'bar');

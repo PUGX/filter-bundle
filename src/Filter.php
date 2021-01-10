@@ -31,6 +31,8 @@ final class Filter
      * Perform actual filtering. You need to pass ad identifying name.
      * You'll get an array with name of fields in keys and filtered values in values
      * (except for "_sort" key, that holds info for sorting).
+     *
+     * @return array<string, mixed>
      */
     public function filter(string $name): array
     {
@@ -53,12 +55,12 @@ final class Filter
 
     /**
      * Get value of a single form field.
+     *
+     * @return mixed
      */
     public function getFormData(string $name, string $field)
     {
-        $name .= $this->getSession()->getId();
-
-        return $this->forms[$name]->getData()[$field];
+        return $this->getForm($name)->getData()[$field];
     }
 
     /**
@@ -66,14 +68,14 @@ final class Filter
      */
     public function getFormView(string $name): FormView
     {
-        $name .= $this->getSession()->getId();
-
-        return $this->forms[$name]->createView();
+        return $this->getForm($name)->createView();
     }
 
     /**
      * Save filtered values from form into session.
      * Possible default values for empty fields can be passed as last argument.
+     *
+     * @param array<string, mixed> $defaults
      */
     public function saveFilter(string $formName, string $name, array $defaults = []): bool
     {
@@ -110,6 +112,16 @@ final class Filter
         $this->getSession()->set('filter_sort.'.$name, ['field' => $field, 'direction' => $direction]);
     }
 
+    private function getForm(string $name): FormInterface
+    {
+        $name .= $this->getSession()->getId();
+        if (!isset($this->forms[$name])) {
+            throw new \RuntimeException('Cannot find form. Did you call saveFilter() before?');
+        }
+
+        return $this->forms[$name];
+    }
+
     private function getRequest(): Request
     {
         return $this->requestStack->getCurrentRequest();
@@ -120,6 +132,9 @@ final class Filter
         return $this->getRequest()->getSession();
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getSort(string $name): array
     {
         $session = $this->getSession();
