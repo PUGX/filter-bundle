@@ -115,11 +115,8 @@ final class Filter
     private function getForm(string $name): FormInterface
     {
         $name .= $this->getSession()->getId();
-        if (!isset($this->forms[$name])) {
-            throw new \RuntimeException('Cannot find form. Did you call saveFilter() before?');
-        }
 
-        return $this->forms[$name];
+        return $this->forms[$name] ?? $this->formFactory->create($name);
     }
 
     private function getRequest(): Request

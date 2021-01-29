@@ -59,11 +59,14 @@ final class FilterTest extends TestCase
         self::assertEquals($view, $formView);
     }
 
-    public function testFormViewException(): void
+    public function testFormViewWithoutPreviousForm(): void
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Cannot find form. Did you call saveFilter() before?');
-        $this->filter->getFormView('foo');
+        $view = $this->createMock(FormView::class);
+        $form = $this->createMock(FormInterface::class);
+        $form->method('createView')->willReturn($view);
+        $this->factory->method('create')->with('foo')->willReturn($form);
+        $formView = $this->filter->getFormView('foo');
+        self::assertEquals($view, $formView);
     }
 
     public function testSort(): void
