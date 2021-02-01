@@ -74,7 +74,7 @@ Form Example
 ```php
 <?php
 
-class MyFilterType extends AbstractType
+class FooFilterType extends AbstractType
 {
    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -108,7 +108,7 @@ Example of template:
 {% from '_pugx_sort.html.twig' import sort -%}
 
 {% block body %}
-    {% include '_pugx_filter.html.twig' with {name: 'coach'} %}
+    {% include '_pugx_filter.html.twig' with {name: 'foo'} %}
     <table class="table">
         <thead>
             <tr>

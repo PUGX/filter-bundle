@@ -112,6 +112,9 @@ final class Filter
         $this->getSession()->set('filter_sort.'.$name, ['field' => $field, 'direction' => $direction]);
     }
 
+    /**
+     * @return FormInterface<string, string|FormInterface>
+     */
     private function getForm(string $name): FormInterface
     {
         $name .= $this->getSession()->getId();

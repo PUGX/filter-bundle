@@ -10,6 +10,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 final class FilterExtension extends Extension implements PrependExtensionInterface
 {
+    /**
+     * @param array<string, mixed> $configs
+     */
     public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../../config'));
@@ -21,8 +24,8 @@ final class FilterExtension extends Extension implements PrependExtensionInterfa
         if (!$container->hasExtension('twig')) {
             return;
         }
-        $refl = new \ReflectionClass(__CLASS__);
-        $path = \dirname($refl->getFileName()).'/../../templates';
+        $reflection = new \ReflectionClass(__CLASS__);
+        $path = \dirname($reflection->getFileName()).'/../../templates';
         $container->prependExtensionConfig('twig', ['paths' => [$path]]);
     }
 }

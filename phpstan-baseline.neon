@@ -1,0 +1,32 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Parameter \\#1 \\$path of function dirname expects string, string\\|false given\\.$#"
+			count: 1
+			path: src/DependencyInjection/FilterExtension.php
+
+		-
+			message: "#^Method PUGX\\\\FilterBundle\\\\Filter\\:\\:getRequest\\(\\) should return Symfony\\\\Component\\\\HttpFoundation\\\\Request but returns Symfony\\\\Component\\\\HttpFoundation\\\\Request\\|null\\.$#"
+			count: 1
+			path: src/Filter.php
+
+		-
+			message: "#^Call to an undefined method PHPUnit\\\\Framework\\\\MockObject\\\\MockObject\\|Symfony\\\\Component\\\\Form\\\\FormFactory\\:\\:method\\(\\)\\.$#"
+			count: 4
+			path: tests/FilterTest.php
+
+		-
+			message: "#^Call to an undefined method PHPUnit\\\\Framework\\\\MockObject\\\\MockObject\\|Symfony\\\\Component\\\\HttpFoundation\\\\Session\\\\SessionInterface\\:\\:expects\\(\\)\\.$#"
+			count: 3
+			path: tests/Twig/FilterRuntimeTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$session of class PUGX\\\\FilterBundle\\\\Twig\\\\FilterRuntime constructor expects Symfony\\\\Component\\\\HttpFoundation\\\\Session\\\\SessionInterface, PHPUnit\\\\Framework\\\\MockObject\\\\MockObject\\|Symfony\\\\Component\\\\HttpFoundation\\\\Session\\\\SessionInterface given\\.$#"
+			count: 2
+			path: tests/Twig/FilterRuntimeTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$filter of class PUGX\\\\FilterBundle\\\\Twig\\\\FilterRuntime constructor expects PUGX\\\\FilterBundle\\\\Filter, PHPUnit\\\\Framework\\\\MockObject\\\\MockObject\\|PUGX\\\\FilterBundle\\\\Filter given\\.$#"
+			count: 2
+			path: tests/Twig/FilterRuntimeTest.php
+
