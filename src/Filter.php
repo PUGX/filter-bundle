@@ -2,6 +2,7 @@
 
 namespace PUGX\FilterBundle;
 
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -65,10 +66,12 @@ final class Filter
 
     /**
      * Get the form object to pass to a template.
+     * You can pass an optional type, if you want to ensure that a view
+     * of same form type is returned.
      */
-    public function getFormView(string $name): FormView
+    public function getFormView(string $name, ?string $type = null): FormView
     {
-        return $this->getForm($name)->createView();
+        return $this->getForm($name, $type)->createView();
     }
 
     /**
@@ -77,10 +80,10 @@ final class Filter
      *
      * @param array<string, mixed> $defaults
      */
-    public function saveFilter(string $formName, string $name, array $defaults = []): bool
+    public function saveFilter(string $type, string $name, array $defaults = []): bool
     {
         $fname = $name.$this->getSession()->getId();
-        $this->forms[$fname] = $this->formFactory->create($formName);
+        $this->forms[$fname] = $this->formFactory->create($type);
         if ($this->getRequest()->query->has('reset-filter')) {
             $this->getSession()->set('filter.'.$name, null);
 
@@ -115,11 +118,11 @@ final class Filter
     /**
      * @return FormInterface<string, string|FormInterface>
      */
-    private function getForm(string $name): FormInterface
+    private function getForm(string $name, ?string $type = null): FormInterface
     {
         $name .= $this->getSession()->getId();
 
-        return $this->forms[$name] ?? $this->formFactory->create($name);
+        return $this->forms[$name] ?? $this->formFactory->create($type ?? FormType::class);
     }
 
     private function getRequest(): Request

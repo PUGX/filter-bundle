@@ -64,8 +64,8 @@ final class FilterTest extends TestCase
         $view = $this->createMock(FormView::class);
         $form = $this->createMock(FormInterface::class);
         $form->method('createView')->willReturn($view);
-        $this->factory->method('create')->with('foo')->willReturn($form);
-        $formView = $this->filter->getFormView('foo');
+        $this->factory->method('create')->with(StubFormType::class)->willReturn($form);
+        $formView = $this->filter->getFormView('foo', StubFormType::class);
         self::assertEquals($view, $formView);
     }
 
