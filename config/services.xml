@@ -12,7 +12,7 @@
             <tag name="twig.extension"/>
         </service>
         <service id="PUGX\FilterBundle\Twig\FilterRuntime" public="false">
-            <argument type="service" id="session"/>
+            <argument type="service" id="request_stack"/>
             <argument type="service" id="PUGX\FilterBundle\Filter"/>
             <tag name="twig.runtime"/>
         </service>
