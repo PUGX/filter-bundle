@@ -21,7 +21,7 @@ parameters:
 			path: tests/Twig/FilterRuntimeTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$session of class PUGX\\\\FilterBundle\\\\Twig\\\\FilterRuntime constructor expects Symfony\\\\Component\\\\HttpFoundation\\\\Session\\\\SessionInterface, PHPUnit\\\\Framework\\\\MockObject\\\\MockObject\\|Symfony\\\\Component\\\\HttpFoundation\\\\Session\\\\SessionInterface given\\.$#"
+			message: "#^Parameter \\#1 \\$session of method Symfony\\\\Component\\\\HttpFoundation\\\\Request\\:\\:setSession\\(\\) expects Symfony\\\\Component\\\\HttpFoundation\\\\Session\\\\SessionInterface, PHPUnit\\\\Framework\\\\MockObject\\\\MockObject\\|Symfony\\\\Component\\\\HttpFoundation\\\\Session\\\\SessionInterface given\\.$#"
 			count: 2
 			path: tests/Twig/FilterRuntimeTest.php
 
