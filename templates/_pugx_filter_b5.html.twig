@@ -1,4 +1,4 @@
-<button type="button" class="btn btn-light filter d-print-none mb-1" data-bs-toggle="collapse" data-target="#filter">
+<button type="button" class="btn btn-light filter d-print-none mb-1" data-bs-toggle="collapse" data-bs-target="#filter">
     {{ 'show_hide'|trans({}, 'filter') }} <i class="fa fa-angle-{{ filter_has(name) ? 'right' : 'down' }}"></i>
 </button>
 <div id="filter" class="d-print-none collapse{% if filter_has(name) %} show{% endif %}">
