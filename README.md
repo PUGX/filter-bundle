@@ -200,6 +200,30 @@ Currently supported options are:
 * `callbackHide` a callback to be used when filters are collapsed
 * `callbackShow` a callback to be used when filters are shown
 
+If you prefer vanilla js with Bootstrap, you can use the following snippet:
+
+```js
+import Collapse from "bootstrap/js/src/collapse";
+
+let collapses = document.querySelectorAll("[data-bs-toggle='collapse']");
+Array.from(collapses, (collapse) => {
+    new Collapse(collapse);
+    let filter = document.getElementById("filter");
+    if (filter) {
+        filter.addEventListener("hide.bs.collapse", () => {
+            let icon = collapse.querySelector("button.filter svg, button.filter i");
+            icon && icon.classList.remove("fa-angle-right");
+            icon && icon.classList.add("fa-angle-down");
+        });
+        filter.addEventListener("show.bs.collapse", () => {
+            let icon = collapse.querySelector("button.filter svg, button.filter i");
+            icon && icon.classList.remove("fa-angle-down");
+            icon && icon.classList.add("fa-angle-right");
+        });
+    }
+});
+```
+
 Helpers
 -------
 
