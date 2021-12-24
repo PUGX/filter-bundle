@@ -22,7 +22,7 @@ final class FilterTest extends TestCase
     protected function setUp(): void
     {
         $this->factory = $this->createMock(FormFactory::class);
-        $fakeRequest = Request::create('/', 'GET');
+        $fakeRequest = Request::create('/');
         $fakeRequest->setSession(new Session(new MockArraySessionStorage()));
         $stack = new RequestStack();
         $stack->push($fakeRequest);
@@ -31,7 +31,6 @@ final class FilterTest extends TestCase
 
     public function testFilter(): void
     {
-        $this->factory->method('create')->with(StubFormType::class)->willReturn(new StubFormType());
         $this->filter->saveFilter(StubFormType::class, 'foo');
         $filter = $this->filter->filter('foo');
         self::assertEquals([], $filter);

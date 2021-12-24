@@ -12,7 +12,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method PHPUnit\\\\Framework\\\\MockObject\\\\MockObject\\|Symfony\\\\Component\\\\Form\\\\FormFactory\\:\\:method\\(\\)\\.$#"
-			count: 4
+			count: 3
 			path: tests/FilterTest.php
 
 		-

@@ -145,7 +145,7 @@ final class Filter
             return [];
         }
         $sort = $session->get('filter_sort.'.$name);
-        if (!is_array($sort)) {
+        if (!\is_array($sort)) {
             $msg = \sprintf('filter_sort.%s should be an array, %s found', $name, \gettype($sort));
             throw new \UnexpectedValueException($msg);
         }
