@@ -12,14 +12,12 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class Filter
 {
-    /** @var FormFactoryInterface */
-    private $formFactory;
+    private FormFactoryInterface $formFactory;
 
-    /** @var RequestStack */
-    private $requestStack;
+    private RequestStack $requestStack;
 
     /** @var array|FormInterface[] */
-    private $forms;
+    private array $forms;
 
     public function __construct(FormFactoryInterface $formFactory, RequestStack $requestStack)
     {
@@ -39,12 +37,11 @@ final class Filter
     {
         $filter = [];
         $fname = $name.$this->getSession()->getId();
+        /** @var array<string, mixed> $values */
         $values = $this->getSession()->get('filter.'.$name);
         if (null !== $values) {
             if ($this->forms[$fname]->isSubmitted() || $this->forms[$fname]->submit($values)->isValid()) {
-                $filter = \array_filter($values, static function ($value): bool {
-                    return '' !== $value;
-                });
+                $filter = \array_filter($values, static fn ($value): bool => '' !== $value);
             }
         }
         if ([] !== ($sort = $this->getSort($name))) {
@@ -61,7 +58,10 @@ final class Filter
      */
     public function getFormData(string $name, string $field)
     {
-        return $this->getForm($name)->getData()[$field];
+        /** @var array<string, mixed> $data */
+        $data = $this->getForm($name)->getData();
+
+        return $data[$field];
     }
 
     /**
@@ -141,7 +141,15 @@ final class Filter
     private function getSort(string $name): array
     {
         $session = $this->getSession();
+        if (!$session->has('filter_sort.'.$name)) {
+            return [];
+        }
+        $sort = $session->get('filter_sort.'.$name);
+        if (!is_array($sort)) {
+            $msg = \sprintf('filter_sort.%s should be an array, %s found', $name, \gettype($sort));
+            throw new \UnexpectedValueException($msg);
+        }
 
-        return $session->has('filter_sort.'.$name) ? $session->get('filter_sort.'.$name) : [];
+        return $sort;
     }
 }

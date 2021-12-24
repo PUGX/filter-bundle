@@ -8,11 +8,9 @@ use Twig\Extension\RuntimeExtensionInterface;
 
 final class FilterRuntime implements RuntimeExtensionInterface
 {
-    /** @var RequestStack */
-    private $requestStack;
+    private RequestStack $requestStack;
 
-    /** @var PFilter */
-    private $filter;
+    private PFilter $filter;
 
     public function __construct(RequestStack $requestStack, PFilter $filter)
     {

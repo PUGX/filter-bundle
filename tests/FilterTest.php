@@ -14,8 +14,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 final class FilterTest extends TestCase
 {
-    /** @var Filter */
-    private $filter;
+    private Filter $filter;
 
     /** @var \PHPUnit\Framework\MockObject\MockObject|FormFactory */
     private $factory;
