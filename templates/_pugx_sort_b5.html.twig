@@ -2,11 +2,11 @@
     {%- set sort = app.request.session.get('filter_sort.' ~ name) -%}
     {%- if sort and sort.field == field -%}
         {%- if sort.direction == 'DESC' -%}
-            <a href="{{ path(route, {field: field, direction: 'ASC'}) }}" class="float-right d-print-none">
+            <a href="{{ path(route, {field: field, direction: 'ASC'}) }}" class="float-end d-print-none">
                 <i class="fas fa-sort-down"></i>
             </a>
         {%- elseif sort.direction == 'ASC' -%}
-            <a href="{{ path(route, {field: field, direction: 'DESC'}) }}" class="float-right d-print-none">
+            <a href="{{ path(route, {field: field, direction: 'DESC'}) }}" class="float-end d-print-none">
                 <i class="fas fa-sort-up"></i>
             </a>
         {%- endif -%}
