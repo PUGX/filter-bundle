@@ -11,7 +11,7 @@ return (new PhpCsFixer\Config())
         '@Symfony' => true,
         '@Symfony:risky' => true,
         '@PHP71Migration:risky' => true,
-        '@PHPUnit75Migration:risky' => true,
+        '@PHPUnit84Migration:risky' => true,
         'ordered_imports' => true,
         'declare_strict_types' => false,
         'native_function_invocation' => ['include' => ['@all']],
