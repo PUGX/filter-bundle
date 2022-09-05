@@ -76,14 +76,15 @@ final class Filter
 
     /**
      * Save filtered values from form into session.
-     * Possible default values for empty fields can be passed as last argument.
+     * Possible default values for empty fields can be passed as third argument.
      *
      * @param array<string, mixed> $defaults
+     * @param array<string, mixed> $options
      */
-    public function saveFilter(string $type, string $name, array $defaults = []): bool
+    public function saveFilter(string $type, string $name, array $defaults = [], array $options = []): bool
     {
         $fname = $name.$this->getSession()->getId();
-        $this->forms[$fname] = $this->formFactory->create($type);
+        $this->forms[$fname] = $this->formFactory->create($type, null, $options);
         if ($this->getRequest()->query->has('reset-filter')) {
             $this->getSession()->set('filter.'.$name, null);
 
