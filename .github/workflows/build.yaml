@@ -6,7 +6,7 @@ on:
 
 jobs:
     phpstan:
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-22.04
         name: PHPStan
         steps:
             - name: Checkout
@@ -18,7 +18,7 @@ jobs:
               with:
                   args: analyse
     cs-fixer:
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-22.04
         name: PHP-CS-Fixer
         steps:
             - name: Checkout
@@ -26,19 +26,16 @@ jobs:
             - name: Fix CS
               uses: docker://oskarstark/php-cs-fixer-ga
     tests:
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-22.04
         strategy:
             matrix:
                 include:
                     - description: 'Lowest'
-                      php: '7.4'
+                      php: '8.0'
                       composer_option: '--prefer-lowest'
                     - description: 'Symfony 5.4'
-                      php: '8.0'
-                      symfony: 5.4.*
-                    - description: 'Symfony 6.1'
                       php: '8.1'
-                      symfony: 6.1.*
+                      symfony: 5.4.*
                     - description: 'Symfony 6.2'
                       php: '8.2'
                       symfony: 6.2.*

@@ -12,24 +12,18 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class Filter
 {
-    private FormFactoryInterface $formFactory;
-
-    private RequestStack $requestStack;
-
-    /** @var array|FormInterface[] */
+    /** @var array<int, FormInterface> */
     private array $forms;
 
-    public function __construct(FormFactoryInterface $formFactory, RequestStack $requestStack)
+    public function __construct(private FormFactoryInterface $formFactory, private RequestStack $requestStack)
     {
-        $this->formFactory = $formFactory;
-        $this->requestStack = $requestStack;
         $this->forms = [];
     }
 
     /**
-     * Perform actual filtering. You need to pass ad identifying name.
-     * You'll get an array with name of fields in keys and filtered values in values
-     * (except for "_sort" key, that holds info for sorting).
+     * Perform actual filtering. You need to pass an identifying name.
+     * You'll get an array with name of fields as keys and the filtered values
+     * as values (except for "_sort" key, which holds info for sorting).
      *
      * @return array<string, mixed>
      */
@@ -52,11 +46,9 @@ final class Filter
     }
 
     /**
-     * Get value of a single form field.
-     *
-     * @return mixed
+     * Get the value of a single form field.
      */
-    public function getFormData(string $name, string $field)
+    public function getFormData(string $name, string $field): mixed
     {
         /** @var array<string, mixed> $data */
         $data = $this->getForm($name)->getData();
@@ -67,7 +59,7 @@ final class Filter
     /**
      * Get the form object to pass to a template.
      * You can pass an optional type, if you want to ensure that a view
-     * of same form type is returned.
+     * of the same form type is returned.
      */
     public function getFormView(string $name, ?string $type = null): FormView
     {
@@ -75,7 +67,7 @@ final class Filter
     }
 
     /**
-     * Save filtered values from form into session.
+     * Save the filtered values from form into session.
      * Possible default values for empty fields can be passed as third argument.
      *
      * @param array<string, mixed> $defaults

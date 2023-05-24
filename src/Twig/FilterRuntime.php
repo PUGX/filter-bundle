@@ -8,14 +8,8 @@ use Twig\Extension\RuntimeExtensionInterface;
 
 final class FilterRuntime implements RuntimeExtensionInterface
 {
-    private RequestStack $requestStack;
-
-    private PFilter $filter;
-
-    public function __construct(RequestStack $requestStack, PFilter $filter)
+    public function __construct(private RequestStack $requestStack, private PFilter $filter)
     {
-        $this->requestStack = $requestStack;
-        $this->filter = $filter;
     }
 
     public function has(string $name): bool
