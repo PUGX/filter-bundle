@@ -19,7 +19,7 @@ final class FilterRuntime implements RuntimeExtensionInterface
         }
         $session = $request->getSession();
 
-        return $session->has(('filter.'.$name)) && null !== $session->get(('filter.'.$name));
+        return $session->has('filter.'.$name) && null !== $session->get('filter.'.$name);
     }
 
     public function isSet(string $prefix, string $name): bool

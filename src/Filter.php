@@ -61,7 +61,7 @@ final class Filter
      * You can pass an optional type, if you want to ensure that a view
      * of the same form type is returned.
      */
-    public function getFormView(string $name, ?string $type = null): FormView
+    public function getFormView(string $name, string $type = null): FormView
     {
         return $this->getForm($name, $type)->createView();
     }
