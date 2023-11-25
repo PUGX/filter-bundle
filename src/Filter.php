@@ -13,11 +13,10 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 final class Filter
 {
     /** @var array<int|string, FormInterface> */
-    private array $forms;
+    private array $forms = [];
 
     public function __construct(private FormFactoryInterface $formFactory, private RequestStack $requestStack)
     {
-        $this->forms = [];
     }
 
     /**

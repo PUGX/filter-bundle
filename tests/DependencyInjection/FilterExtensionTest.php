@@ -22,7 +22,7 @@ final class FilterExtensionTest extends TestCase
         /** @var ContainerBuilder&\PHPUnit\Framework\MockObject\MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
         $container->expects(self::once())->method('hasExtension')->willReturn(false);
-        $container->expects(self::never())->method('prependExtensionConfig')->willReturn(true);
+        $container->expects(self::never())->method('prependExtensionConfig');
         $extension = new FilterExtension();
         $extension->prepend($container);
     }
@@ -32,7 +32,7 @@ final class FilterExtensionTest extends TestCase
         /** @var ContainerBuilder&\PHPUnit\Framework\MockObject\MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
         $container->expects(self::once())->method('hasExtension')->willReturn(true);
-        $container->expects(self::once())->method('prependExtensionConfig')->willReturn(true);
+        $container->expects(self::once())->method('prependExtensionConfig');
         $extension = new FilterExtension();
         $extension->prepend($container);
     }
