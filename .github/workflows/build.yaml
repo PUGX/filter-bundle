@@ -10,7 +10,7 @@ jobs:
         name: PHPStan
         steps:
             - name: Checkout
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
             - name: PHPStan
               uses: docker://oskarstark/phpstan-ga
               env:
@@ -22,7 +22,7 @@ jobs:
         name: PHP-CS-Fixer
         steps:
             - name: Checkout
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
             - name: Fix CS
               uses: docker://oskarstark/php-cs-fixer-ga
     tests:
@@ -31,14 +31,15 @@ jobs:
             matrix:
                 include:
                     - description: 'Lowest'
-                      php: '8.0'
-                      composer_option: '--prefer-lowest'
-                    - description: 'Symfony 5.4'
                       php: '8.1'
-                      symfony: 5.4.*
-                    - description: 'Symfony 6.2'
+                      symfony: 6.4.*@dev
+                      composer_option: '--prefer-lowest'
+                    - description: 'Symfony 6.4'
                       php: '8.2'
-                      symfony: 6.2.*
+                      symfony: 6.4.*@dev
+                    - description: 'Symfony 7.0'
+                      php: '8.3'
+                      symfony: 7.0.*@dev
         name: PHP ${{ matrix.php }} tests (${{ matrix.description }})
         steps:
             - name: Checkout
@@ -52,9 +53,17 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php }}
-            - run: |
-                  sed -ri 's/"symfony\/(.+)": "(.+)"/"symfony\/\1": "'${{ matrix.symfony }}'"/' composer.json;
+            - name: Require specific Symfony version
               if: matrix.symfony
-            - run: composer update --no-interaction --no-progress --ansi ${{ matrix.composer_option }}
-            - run: vendor/bin/phpunit
+              run: |
+                  sed -ri 's/"symfony\/(.+)": "(.+)"/"symfony\/\1": "'${{ matrix.symfony }}'"/' composer.json;
+            - name: Use possible dev deps
+              if: contains(matrix.symfony, '@dev')
+              run: |
+                  composer config minimum-stability dev 
+                  composer config prefer-stable true
+            - name: Update vendors
+              run: composer update --no-interaction --no-progress --ansi ${{ matrix.composer_option }}
+            - name: Run tests
+              run: vendor/bin/phpunit
 
