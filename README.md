@@ -61,7 +61,7 @@ class FooController extends AbstractController
 
 ```twig
 {# this will display your form. Use '_pugx_filter_b4.html.twig' or '_pugx_filter_b5.html.twig' for Bootstrap 4 / 5 #} 
-{% include '_pugx_filter.html.twig' with {name: 'foo'} %}
+{{ include('_pugx_filter.html.twig' with {name: 'foo'}) }}
 
 {% for foo in foos %}
     {# here you can display your list of filtered items, as long as you did your homework #}
@@ -108,7 +108,7 @@ Example of template:
 {% from '_pugx_sort.html.twig' import sort -%}
 
 {% block body %}
-    {% include '_pugx_filter.html.twig' with {name: 'foo'} %}
+    {{ include('_pugx_filter.html.twig' with {name: 'foo'}) }}
     <table class="table">
         <thead>
             <tr>
