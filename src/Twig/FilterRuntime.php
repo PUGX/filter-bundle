@@ -14,7 +14,7 @@ final class FilterRuntime implements RuntimeExtensionInterface
 
     public function has(string $name): bool
     {
-        if (null === $request = $this->requestStack->getCurrentRequest()) {
+        if (null === $request = $this->requestStack->getMainRequest()) {
             throw new \RuntimeException('No session found.');
         }
         $session = $request->getSession();
