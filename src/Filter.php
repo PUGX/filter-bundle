@@ -119,7 +119,7 @@ final class Filter
 
     private function getRequest(): Request
     {
-        return $this->requestStack->getCurrentRequest();
+        return $this->requestStack->getMainRequest();
     }
 
     private function getSession(): SessionInterface
