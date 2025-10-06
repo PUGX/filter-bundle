@@ -36,7 +36,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
             - name: Require the vendor
-              run: composer require --dev --no-update vincentlanglet/twig-cs-fixer ^3.9
+              run: composer require --dev --no-update vincentlanglet/twig-cs-fixer ^3.10
             - name: Update
               run: composer update --no-interaction --no-progress
             - name: Run
