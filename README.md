@@ -1,37 +1,32 @@
-PUGX FilterBundle
-=================
+# PUGX FilterBundle
 
 [![Total Downloads](https://poser.pugx.org/pugx/filter-bundle/downloads.png)](https://packagist.org/packages/pugx/filter-bundle)
 [![Build Status](https://github.com/PUGX/filter-bundle/workflows/Build/badge.svg)](https://github.com/PUGX/filter-bundle/actions)
 
-The purpose of this bundle is providing a way to get some filters, that stay in session, to
+The purpose of this bundle is to provide a way to get some filters that stay in session, to
 be able to use them when displaying a list of items. It also supports sorting.
 
-* [Setup](#Setup)
-* [Basic Usage](#basic-usage)
-* [Form Example](#form-example)
-* [Sorting](#sorting)
-* [Translation](#translation)
-* [JavaScript](#javascript)
-* [Helpers](#helpers)
+## Setup
 
-Setup
------
+Run 
 
-Run `composer require pugx/filter-bundle`. No configuration is required.
+```bash
+`composer require pugx/filter-bundle
+```
 
-Basic Usage
------------
+No configuration is required.
 
-Inject provided service in your controller and use it with a form.
+## Basic Usage
 
-Your form should use `GET` as method, use some fields that make sense on your list of item,
+Inject the provided service in your controller and use it with a form.
+
+Your form should use `GET` as method, use some fields that make sense on your list of items,
 and **not** use CSRF protection.
 
-First step is to save filter with a name (if form is submitted). Then, you can get
+The first step is to save the filter with a name (if the form is submitted). Then, you can get
 a key/value array in `$filter->filter('foo')`, where "foo" is the name you provided above.
 
-Using such array to retrieve filtered value is up to you: this bundle makes no assumptions on
+Using such an array to retrieve the filtered value is up to you: this bundle makes no assumptions about
 your domain and doesn't do magic.
 
 Here is an example:
@@ -68,8 +63,7 @@ class FooController extends AbstractController
 {% endfor %}
 ```
 
-Form Example
-------------
+## Form Example
 
 ```php
 <?php
@@ -96,10 +90,9 @@ class FooFilterType extends AbstractType
 
 ```
 
-Sorting
--------
+## Sorting
 
-You can use provided Twig extension for column sorting functionality.
+You can use the provided Twig extension for column sorting functionality.
 
 Example of template:
 
@@ -126,7 +119,7 @@ Example of template:
 
 You need to provide a route/action to perform sorting, using `$filter->sort('foo', $field, $direction)`.
 
-Then, you'll find an addtional value inside your filter array, like this:
+Then, you'll find an additional value inside your filter array, like this:
 
 ```php
 $filters = [
@@ -137,15 +130,14 @@ $filters = [
 ];
 ```
 
-You can use this value to perform your sorting (again, this is up to you and it depends on your domain logic).
+You can use this value to perform your sorting (again, this is up to you, and it depends on your domain logic).
 
 
-Translation
------------
+## Translation
 
 Translations are available (for now, only for English/French/Italian).
 
-If you're using Symfony 4.4+, translatons should be automatically discovered.
+If you're using Symfony 4.4+, translations should be automatically discovered.
 
 On older Symfony versions, add this to your configuration:
 
@@ -159,10 +151,9 @@ framework:
 
 ```
 
-JavaScript
-----------
+## JavaScript
 
-A jQuery helper is provided, to enhance UX.
+A jQuery helper is provided to enhance UX.
 You can use it by requiring the following line in your package.json file:
 
 ```json
@@ -189,9 +180,9 @@ $(document).ready(function () {
 
 ```
 
-The basic results will be that icon in the toggle button will be toggled along,
-and the arrow will point to right when filters are shown (and back to bottom when
-filters are collapsed).
+The basic results will be that the icon in the toggle button will be toggled along,
+and the arrow will point to the right when filters are shown (and back to the bottom when
+the filters are collapsed).
 
 You can pass an option object to `pugxFilter` function.
 
@@ -200,7 +191,7 @@ Currently supported options are:
 * `callbackHide` a callback to be used when filters are collapsed
 * `callbackShow` a callback to be used when filters are shown
 
-If you prefer vanilla js with Bootstrap, you can use the following snippet:
+If you prefer vanilla JavaScript with Bootstrap, you can use the following snippet:
 
 ```js
 import Collapse from "bootstrap/js/src/collapse";
@@ -224,12 +215,10 @@ Array.from(collapses, (collapse) => {
 });
 ```
 
-Helpers
--------
+## Helpers
 
-Following helper functions are available as functions in twig templates:
+The following helper functions are available as functions in Twig templates:
 
-* `filter_has`: tells if a filter is enabled (e.g. if a session for filter exists)
+* `filter_has`: tells if a filter is enabled (e.g. if a session for the filter exists)
 * `filter_is`: tells if a filter field is selected
 * `filter_is_not`: tells if a filter field is not selected
-
