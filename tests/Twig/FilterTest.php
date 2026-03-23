@@ -10,6 +10,6 @@ final class FilterTest extends TestCase
     public function testFunctions(): void
     {
         $filter = new Filter();
-        self::assertIsArray($filter->getFunctions());
+        self::assertIsArray($filter->getFunctions());   // @phpstan-ignore-line staticMethod.alreadyNarrowedType
     }
 }
