@@ -14,7 +14,7 @@ final class FilterExtensionTest extends TestCase
         $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
         $extension = new FilterExtension();
         $extension->load([], $container);
-        self::assertTrue(true);
+        self::assertTrue(true); // @phpstan-ignore-line staticMethod.alreadyNarrowedType
     }
 
     public function testPrependWithoutTwig(): void

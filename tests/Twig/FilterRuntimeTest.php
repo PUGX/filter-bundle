@@ -13,14 +13,15 @@ final class FilterRuntimeTest extends TestCase
 {
     public function testHasFalse(): void
     {
-        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        /** @var SessionInterface&\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
-        $session->expects(self::once())->method('has')->willReturn(false);
-        $request = Request::create('/', 'GET');
+        $session->expects($this->once())->method('has')->willReturn(false);
+        $request = Request::create('/');
         $request->setSession($session);
         $requestStack = new RequestStack();
         $requestStack->push($request);
-        /** @var Filter|\PHPUnit\Framework\MockObject\MockObject $filter */
+        // @phpstan-ignore-next-line varTag.unresolvableType
+        /** @var Filter&\PHPUnit\Framework\MockObject\MockObject $filter */
         $filter = $this->createMock(Filter::class);
         $filterRuntime = new FilterRuntime($requestStack, $filter);
         self::assertFalse($filterRuntime->has('foo'));
@@ -28,15 +29,16 @@ final class FilterRuntimeTest extends TestCase
 
     public function testHasTrue(): void
     {
-        /** @var SessionInterface|\PHPUnit\Framework\MockObject\MockObject $session */
+        /** @var SessionInterface&\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(SessionInterface::class);
-        $session->expects(self::once())->method('has')->willReturn(true);
-        $session->expects(self::once())->method('get')->willReturn('bar');
-        $request = Request::create('/', 'GET');
+        $session->expects($this->once())->method('has')->willReturn(true);
+        $session->expects($this->once())->method('get')->willReturn('bar');
+        $request = Request::create('/');
         $request->setSession($session);
         $requestStack = new RequestStack();
         $requestStack->push($request);
-        /** @var Filter|\PHPUnit\Framework\MockObject\MockObject $filter */
+        // @phpstan-ignore-next-line varTag.unresolvableType
+        /** @var Filter&\PHPUnit\Framework\MockObject\MockObject $filter */
         $filter = $this->createMock(Filter::class);
         $filterRuntime = new FilterRuntime($requestStack, $filter);
         self::assertTrue($filterRuntime->has('foo'));

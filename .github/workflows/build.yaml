@@ -14,7 +14,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v6
             - name: PHPStan
-              uses: docker://oskarstark/phpstan-ga:1.8.0
+              uses: docker://oskarstark/phpstan-ga
               env:
                   REQUIRE_DEV: true
               with:
@@ -36,7 +36,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v6
             - name: Require the vendor
-              run: composer require --dev --no-update vincentlanglet/twig-cs-fixer ^3.10
+              run: composer require --dev --no-update vincentlanglet/twig-cs-fixer ^3.14
             - name: Update
               run: composer update --no-interaction --no-progress
             - name: Run
@@ -51,11 +51,8 @@ jobs:
                       symfony: 6.4.*
                       dependencies: lowest
                     - description: 'Symfony 6.4'
-                      php: '8.2'
-                      symfony: 6.4.*
-                    - description: 'Symfony 7.3'
                       php: '8.3'
-                      symfony: 7.3.*
+                      symfony: 6.4.*
                     - description: 'Symfony 7.4'
                       php: '8.4'
                       symfony: 7.4.*

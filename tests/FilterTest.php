@@ -4,7 +4,7 @@ namespace PUGX\FilterBundle\Tests;
 
 use PHPUnit\Framework\TestCase;
 use PUGX\FilterBundle\Filter;
-use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,12 +16,12 @@ final class FilterTest extends TestCase
 {
     private Filter $filter;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|FormFactory */
+    /** @var \PHPUnit\Framework\MockObject\MockObject&FormFactoryInterface */
     private $factory;
 
     protected function setUp(): void
     {
-        $this->factory = $this->createMock(FormFactory::class);
+        $this->factory = $this->createMock(FormFactoryInterface::class);
         $fakeRequest = Request::create('/');
         $fakeRequest->setSession(new Session(new MockArraySessionStorage()));
         $stack = new RequestStack();
@@ -40,6 +40,7 @@ final class FilterTest extends TestCase
     {
         $form = $this->createMock(FormInterface::class);
         $form->method('getData')->willReturn(['bar' => 'baz']);
+        // @phpstan-ignore-next-line method.notFound
         $this->factory->method('create')->with(StubFormType::class)->willReturn($form);
         $this->filter->saveFilter(StubFormType::class, 'foo');
         $data = $this->filter->getFormData('foo', 'bar');
@@ -48,9 +49,10 @@ final class FilterTest extends TestCase
 
     public function testFormView(): void
     {
-        $view = $this->createMock(FormView::class);
-        $form = $this->createMock(FormInterface::class);
+        $view = $this->createStub(FormView::class);
+        $form = $this->createStub(FormInterface::class);
         $form->method('createView')->willReturn($view);
+        // @phpstan-ignore-next-line method.notFound
         $this->factory->method('create')->with(StubFormType::class)->willReturn($form);
         $this->filter->saveFilter(StubFormType::class, 'foo');
         $formView = $this->filter->getFormView('foo');
@@ -59,9 +61,10 @@ final class FilterTest extends TestCase
 
     public function testFormViewWithoutPreviousForm(): void
     {
-        $view = $this->createMock(FormView::class);
-        $form = $this->createMock(FormInterface::class);
+        $view = $this->createStub(FormView::class);
+        $form = $this->createStub(FormInterface::class);
         $form->method('createView')->willReturn($view);
+        // @phpstan-ignore-next-line method.notFound
         $this->factory->method('create')->with(StubFormType::class)->willReturn($form);
         $formView = $this->filter->getFormView('foo', StubFormType::class);
         self::assertEquals($view, $formView);

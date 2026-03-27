@@ -23,7 +23,7 @@ Inject the provided service in your controller and use it with a form.
 Your form should use `GET` as method, use some fields that make sense on your list of items,
 and **not** use CSRF protection.
 
-The first step is to save the filter with a name (if the form is submitted). Then, you can get
+The first step is saving the filter with a name (if the form is submitted). Then, you can get
 a key/value array in `$filter->filter('foo')`, where "foo" is the name you provided above.
 
 Using such an array to retrieve the filtered value is up to you: this bundle makes no assumptions about
@@ -137,19 +137,7 @@ You can use this value to perform your sorting (again, this is up to you, and it
 
 Translations are available (for now, only for English/French/Italian).
 
-If you're using Symfony 4.4+, translations should be automatically discovered.
-
-On older Symfony versions, add this to your configuration:
-
-```yaml
-# config/packages/translation.yaml
-framework:
-    translator:
-        paths:
-            - '%kernel.project_dir%/translations/'  # this line should be already present
-            - '%kernel.project_dir%/vendor/pugx/filter-bundle/translations/' # add this line
-
-```
+The translations should be automatically discovered.
 
 ## JavaScript
 

@@ -30,7 +30,7 @@ final class Filter
     {
         $filter = [];
         $fname = $name.$this->getSession()->getId();
-        /** @var array<string, mixed> $values */
+        /** @var array<string, mixed>|null $values */
         $values = $this->getSession()->get('filter.'.$name);
         if (null !== $values) {
             if ($this->forms[$fname]->isSubmitted() || $this->forms[$fname]->submit($values)->isValid()) {
