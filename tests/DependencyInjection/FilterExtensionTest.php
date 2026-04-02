@@ -10,8 +10,7 @@ final class FilterExtensionTest extends TestCase
 {
     public function testLoadSetParameters(): void
     {
-        /** @var ContainerBuilder&\PHPUnit\Framework\MockObject\MockObject $container */
-        $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
+        $container = $this->createStub(ContainerBuilder::class);
         $extension = new FilterExtension();
         $extension->load([], $container);
         self::assertTrue(true); // @phpstan-ignore-line staticMethod.alreadyNarrowedType
@@ -20,9 +19,9 @@ final class FilterExtensionTest extends TestCase
     public function testPrependWithoutTwig(): void
     {
         /** @var ContainerBuilder&\PHPUnit\Framework\MockObject\MockObject $container */
-        $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
-        $container->expects(self::once())->method('hasExtension')->willReturn(false);
-        $container->expects(self::never())->method('prependExtensionConfig');
+        $container = $this->createMock(ContainerBuilder::class);
+        $container->expects($this->once())->method('hasExtension')->willReturn(false);
+        $container->expects($this->never())->method('prependExtensionConfig');
         $extension = new FilterExtension();
         $extension->prepend($container);
     }
@@ -30,9 +29,9 @@ final class FilterExtensionTest extends TestCase
     public function testPrependWithTwig(): void
     {
         /** @var ContainerBuilder&\PHPUnit\Framework\MockObject\MockObject $container */
-        $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
-        $container->expects(self::once())->method('hasExtension')->willReturn(true);
-        $container->expects(self::once())->method('prependExtensionConfig');
+        $container = $this->createMock(ContainerBuilder::class);
+        $container->expects($this->once())->method('hasExtension')->willReturn(true);
+        $container->expects($this->once())->method('prependExtensionConfig');
         $extension = new FilterExtension();
         $extension->prepend($container);
     }

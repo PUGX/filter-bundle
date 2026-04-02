@@ -20,9 +20,8 @@ final class FilterRuntimeTest extends TestCase
         $request->setSession($session);
         $requestStack = new RequestStack();
         $requestStack->push($request);
-        // @phpstan-ignore-next-line varTag.unresolvableType
-        /** @var Filter&\PHPUnit\Framework\MockObject\MockObject $filter */
-        $filter = $this->createMock(Filter::class);
+        // @phpstan-ignore-next-line method.unresolvableType
+        $filter = $this->createStub(Filter::class);
         $filterRuntime = new FilterRuntime($requestStack, $filter);
         self::assertFalse($filterRuntime->has('foo'));
     }
@@ -38,8 +37,7 @@ final class FilterRuntimeTest extends TestCase
         $requestStack = new RequestStack();
         $requestStack->push($request);
         // @phpstan-ignore-next-line varTag.unresolvableType
-        /** @var Filter&\PHPUnit\Framework\MockObject\MockObject $filter */
-        $filter = $this->createMock(Filter::class);
+        $filter = $this->createStub(Filter::class);
         $filterRuntime = new FilterRuntime($requestStack, $filter);
         self::assertTrue($filterRuntime->has('foo'));
     }

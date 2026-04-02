@@ -10,8 +10,3 @@ parameters:
 			count: 1
 			path: src/Filter.php
 
-		-
-			message: "#^Return type of call to method PHPUnit\\\\Framework\\\\TestCase\\:\\:createMock\\(\\) contains unresolvable type\\.$#"
-			count: 2
-			path: tests/Twig/FilterRuntimeTest.php
-

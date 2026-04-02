@@ -72,7 +72,7 @@ jobs:
               run: composer config minimum-stability dev && composer config prefer-stable true
               if: contains(matrix.symfony, '@dev')
             - name: Install dependencies
-              uses: ramsey/composer-install@v3
+              uses: ramsey/composer-install@v4
               with:
                   dependency-versions: ${{ matrix.dependencies }}
               env:

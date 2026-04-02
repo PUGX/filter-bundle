@@ -15,14 +15,17 @@ final class Filter
     /** @var array<int|string, FormInterface> */
     private array $forms = [];
 
-    public function __construct(private FormFactoryInterface $formFactory, private RequestStack $requestStack)
-    {
+    public function __construct(
+        private readonly FormFactoryInterface $formFactory,
+        private readonly RequestStack $requestStack,
+    ) {
     }
 
     /**
      * Perform actual filtering. You need to pass an identifying name.
      * You'll get an array with name of fields as keys and the filtered values
      * as values (except for "_sort" key, which holds info for sorting).
+     * You need to call saveFilter() before calling this method.
      *
      * @return array<string, mixed>
      */
@@ -30,6 +33,9 @@ final class Filter
     {
         $filter = [];
         $fname = $name.$this->getSession()->getId();
+        if (!isset($this->forms[$fname])) {
+            throw new \UnexpectedValueException(\sprintf('No filter found for "%s". Did you call saveFilter()?', $name));
+        }
         /** @var array<string, mixed>|null $values */
         $values = $this->getSession()->get('filter.'.$name);
         if (null !== $values) {
