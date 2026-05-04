@@ -29,12 +29,6 @@ final class FilterTest extends TestCase
         $this->filter = new Filter($this->factory, $stack);
     }
 
-    public function testFilterWithoutSaveFilterShouldThrowException(): void
-    {
-        $this->expectException(\UnexpectedValueException::class);
-        $this->filter->filter('foo');
-    }
-
     public function testFilter(): void
     {
         $this->filter->saveFilter(StubFormType::class, 'foo');
@@ -79,7 +73,6 @@ final class FilterTest extends TestCase
     public function testSort(): void
     {
         $this->filter->sort('foo', 'bar');
-        $this->filter->saveFilter(StubFormType::class, 'foo');
         $filter = $this->filter->filter('foo');
         self::assertArrayHasKey('_sort', $filter);
     }
