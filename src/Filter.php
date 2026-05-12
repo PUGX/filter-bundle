@@ -117,9 +117,10 @@ final class Filter
     {
         /** @var array{type: string, options: array<string, mixed>}|null $meta */
         $meta = $this->getSession()->get('filter_meta.'.$name);
-        $resolvedType = $type ?? ($meta['type'] ?? FormType::class);
-        $resolvedOptions = $meta['options'] ?? [];
-        $form = $this->formFactory->create($resolvedType, null, $resolvedOptions);
+        if (null === $meta) {
+            return $this->formFactory->create($type ?? FormType::class);
+        }
+        $form = $this->formFactory->create($type ?? $meta['type'], null, $meta['options']);
         if ($this->getRequest()->query->has('submit-filter')) {
             $form->handleRequest($this->getRequest());
         }
