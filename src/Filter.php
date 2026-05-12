@@ -12,9 +12,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class Filter
 {
-    /** @var array<int|string, FormInterface> */
-    private array $forms = [];
-
     public function __construct(
         private readonly FormFactoryInterface $formFactory,
         private readonly RequestStack $requestStack,
@@ -31,12 +28,16 @@ final class Filter
     public function filter(string $name): array
     {
         $filter = [];
-        $fname = $name.$this->getSession()->getId();
         /** @var array<string, mixed>|null $values */
         $values = $this->getSession()->get('filter.'.$name);
         if (null !== $values) {
-            if ($this->forms[$fname]->isSubmitted() || $this->forms[$fname]->submit($values)->isValid()) {
-                $filter = \array_filter($values, static fn ($value): bool => '' !== $value);
+            /** @var array{type: string, options: array<string, mixed>}|null $meta */
+            $meta = $this->getSession()->get('filter_meta.'.$name);
+            if (null !== $meta) {
+                $form = $this->formFactory->create($meta['type'], null, $meta['options']);
+                if ($this->getRequest()->query->has('submit-filter') || $form->submit($values)->isValid()) {
+                    $filter = \array_filter($values, static fn ($value): bool => '' !== $value);
+                }
             }
         }
         if ([] !== ($sort = $this->getSort($name))) {
@@ -76,8 +77,7 @@ final class Filter
      */
     public function saveFilter(string $type, string $name, array $defaults = [], array $options = []): bool
     {
-        $fname = $name.$this->getSession()->getId();
-        $this->forms[$fname] = $this->formFactory->create($type, null, $options);
+        $this->getSession()->set('filter_meta.'.$name, ['type' => $type, 'options' => $options]);
         if ($this->getRequest()->query->has('reset-filter')) {
             $this->getSession()->set('filter.'.$name, null);
 
@@ -91,9 +91,10 @@ final class Filter
         if (!$this->getRequest()->query->has('submit-filter')) {
             return false;
         }
-        $this->forms[$fname]->handleRequest($this->getRequest());
-        if ($this->forms[$fname]->isSubmitted() && $this->forms[$fname]->isValid()) {
-            $this->getSession()->set('filter.'.$name, $this->getRequest()->query->all()[$this->forms[$fname]->getName()]);
+        $form = $this->formFactory->create($type, null, $options);
+        $form->handleRequest($this->getRequest());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getSession()->set('filter.'.$name, $this->getRequest()->query->all()[$form->getName()]);
 
             return true;
         }
@@ -114,9 +115,16 @@ final class Filter
      */
     private function getForm(string $name, ?string $type = null): FormInterface
     {
-        $name .= $this->getSession()->getId();
+        /** @var array{type: string, options: array<string, mixed>}|null $meta */
+        $meta = $this->getSession()->get('filter_meta.'.$name);
+        $resolvedType = $type ?? ($meta['type'] ?? FormType::class);
+        $resolvedOptions = $meta['options'] ?? [];
+        $form = $this->formFactory->create($resolvedType, null, $resolvedOptions);
+        if ($this->getRequest()->query->has('submit-filter')) {
+            $form->handleRequest($this->getRequest());
+        }
 
-        return $this->forms[$name] ?? $this->formFactory->create($type ?? FormType::class);
+        return $form;
     }
 
     private function getRequest(): Request
