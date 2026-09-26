@@ -4,6 +4,7 @@ namespace PUGX\FilterBundle\Tests;
 
 use PHPUnit\Framework\TestCase;
 use PUGX\FilterBundle\Filter;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -68,6 +69,48 @@ final class FilterTest extends TestCase
         $this->factory->method('create')->with(StubFormType::class)->willReturn($form);
         $formView = $this->filter->getFormView('foo', StubFormType::class);
         self::assertEquals($view, $formView);
+    }
+
+    public function testFormViewWhenSessionStartsDuringRequest(): void
+    {
+        // stored filter values, session not started yet: its id is empty until filter() reads it
+        $storage = new MockArraySessionStorage();
+        $storage->setSessionData(['_sf2_attributes' => ['filter.foo' => ['bar' => 'baz']]]);
+        $session = new Session($storage);
+        $request = Request::create('/');
+        $request->setSession($session);
+        $stack = new RequestStack();
+        $stack->push($request);
+
+        $view = $this->createStub(FormView::class);
+        $form = $this->createStub(FormInterface::class);
+        $form->method('createView')->willReturn($view);
+        $form->method('submit')->willReturnSelf();
+        $form->method('isValid')->willReturn(true);
+        $factory = $this->createMock(FormFactoryInterface::class);
+        $factory->expects($this->once())->method('create')->with(StubFormType::class)->willReturn($form);
+        $filter = new Filter($factory, $stack);
+
+        self::assertSame('', $session->getId());
+        $filter->saveFilter(StubFormType::class, 'foo');
+        $filter->filter('foo'); // starts the session
+        self::assertSame($view, $filter->getFormView('foo'), 'same form, even if the session id changed');
+    }
+
+    public function testReset(): void
+    {
+        $types = [];
+        $form = $this->createStub(FormInterface::class);
+        $form->method('createView')->willReturn($this->createStub(FormView::class));
+        $this->factory->expects($this->exactly(2))->method('create')->willReturnCallback(static function (string $type) use (&$types, $form): FormInterface {
+            $types[] = $type;
+
+            return $form;
+        });
+        $this->filter->saveFilter(StubFormType::class, 'foo');
+        $this->filter->reset();
+        $this->filter->getFormView('foo');
+        self::assertSame([StubFormType::class, FormType::class], $types, 'saved form is gone after reset');
     }
 
     public function testSort(): void
