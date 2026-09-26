@@ -10,6 +10,7 @@ return static function (ContainerConfigurator $container): void {
     $services->set(Filter::class)
         ->arg('$formFactory', service('form.factory'))
         ->arg('$requestStack', service('request_stack'))
+        ->tag('kernel.reset', ['method' => 'reset'])
     ;
 
     $services->set(\PUGX\FilterBundle\Twig\Filter::class)

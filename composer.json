@@ -16,6 +16,7 @@
         "symfony/dependency-injection": "^6.4 || ^7.4 || ^8.0",
         "symfony/form": "^6.4 || ^7.4 || ^8.0",
         "symfony/http-kernel": "^6.4 || ^7.4 || ^8.0",
+        "symfony/service-contracts": "^2.5 || ^3.0",
         "twig/twig": "^3.11"
     },
     "require-dev": {

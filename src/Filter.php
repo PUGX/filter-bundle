@@ -9,10 +9,15 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Contracts\Service\ResetInterface;
 
-final class Filter
+/**
+ * Forms are kept only for the current request: reset() clears them, so the service
+ * holds no state across requests in long-running processes (e.g. worker mode).
+ */
+final class Filter implements ResetInterface
 {
-    /** @var array<int|string, FormInterface> */
+    /** @var array<string, FormInterface> */
     private array $forms = [];
 
     public function __construct(
@@ -31,11 +36,10 @@ final class Filter
     public function filter(string $name): array
     {
         $filter = [];
-        $fname = $name.$this->getSession()->getId();
         /** @var array<string, mixed>|null $values */
         $values = $this->getSession()->get('filter.'.$name);
         if (null !== $values) {
-            if ($this->forms[$fname]->isSubmitted() || $this->forms[$fname]->submit($values)->isValid()) {
+            if ($this->forms[$name]->isSubmitted() || $this->forms[$name]->submit($values)->isValid()) {
                 $filter = \array_filter($values, static fn ($value): bool => '' !== $value);
             }
         }
@@ -76,8 +80,7 @@ final class Filter
      */
     public function saveFilter(string $type, string $name, array $defaults = [], array $options = []): bool
     {
-        $fname = $name.$this->getSession()->getId();
-        $this->forms[$fname] = $this->formFactory->create($type, null, $options);
+        $this->forms[$name] = $this->formFactory->create($type, null, $options);
         if ($this->getRequest()->query->has('reset-filter')) {
             $this->getSession()->set('filter.'.$name, null);
 
@@ -91,9 +94,9 @@ final class Filter
         if (!$this->getRequest()->query->has('submit-filter')) {
             return false;
         }
-        $this->forms[$fname]->handleRequest($this->getRequest());
-        if ($this->forms[$fname]->isSubmitted() && $this->forms[$fname]->isValid()) {
-            $this->getSession()->set('filter.'.$name, $this->getRequest()->query->all()[$this->forms[$fname]->getName()]);
+        $this->forms[$name]->handleRequest($this->getRequest());
+        if ($this->forms[$name]->isSubmitted() && $this->forms[$name]->isValid()) {
+            $this->getSession()->set('filter.'.$name, $this->getRequest()->query->all()[$this->forms[$name]->getName()]);
 
             return true;
         }
@@ -114,9 +117,12 @@ final class Filter
      */
     private function getForm(string $name, ?string $type = null): FormInterface
     {
-        $name .= $this->getSession()->getId();
-
         return $this->forms[$name] ?? $this->formFactory->create($type ?? FormType::class);
+    }
+
+    public function reset(): void
+    {
+        $this->forms = [];
     }
 
     private function getRequest(): Request
