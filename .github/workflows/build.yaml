@@ -12,7 +12,7 @@ jobs:
         name: PHPStan
         steps:
             - name: Checkout
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
             - name: PHPStan
               uses: docker://oskarstark/phpstan-ga
               env:
@@ -24,7 +24,7 @@ jobs:
         name: PHP-CS-Fixer
         steps:
             - name: Checkout
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
             - name: Fix CS
               uses: docker://oskarstark/php-cs-fixer-ga
               with:
@@ -34,9 +34,9 @@ jobs:
         name: Twig-CS-Fixer
         steps:
             - name: Checkout
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
             - name: Require the vendor
-              run: composer require --dev --no-update vincentlanglet/twig-cs-fixer ^3.14
+              run: composer require --dev --no-update vincentlanglet/twig-cs-fixer ^4.1
             - name: Update
               run: composer update --no-interaction --no-progress
             - name: Run
@@ -47,7 +47,7 @@ jobs:
             matrix:
                 include:
                     - description: 'Lowest'
-                      php: '8.1'
+                      php: '8.2'
                       symfony: 6.4.*
                       dependencies: lowest
                     - description: 'Symfony 6.4'
@@ -56,13 +56,16 @@ jobs:
                     - description: 'Symfony 7.4'
                       php: '8.4'
                       symfony: 7.4.*
-                    - description: 'Symfony 8.0'
+                    - description: 'Symfony 8.1'
                       php: '8.5'
-                      symfony: 8.0.*
+                      symfony: 8.1.*
+                    - description: 'Symfony 8.2'
+                      php: '8.6'
+                      symfony: 8.2.*@dev
         name: PHP ${{ matrix.php }} tests (${{ matrix.description }})
         steps:
             - name: Checkout
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:

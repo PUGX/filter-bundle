@@ -1,7 +1,7 @@
 <?php
 // see https://github.com/FriendsOfPHP/PHP-CS-Fixer
 
-$finder = PhpCsFixer\Finder::create()
+$finder = (new PhpCsFixer\Finder())
     ->in([__DIR__.'/config',__DIR__.'/src', __DIR__.'/tests'])
 ;
 
@@ -10,8 +10,8 @@ return (new PhpCsFixer\Config())
     ->setRules([
         '@Symfony' => true,
         '@Symfony:risky' => true,
-        '@PHP8x1Migration' => true,
-        '@PHPUnit8x4Migration:risky' => true,
+        '@PHP8x2Migration' => true,
+        '@PHPUnit10x0Migration:risky' => true,
         'declare_strict_types' => false,
         'native_function_invocation' => ['include' => ['@internal']],
         'php_unit_mock_short_will_return' => true,
