@@ -5,8 +5,10 @@ namespace PUGX\FilterBundle\Tests;
 use PHPUnit\Framework\TestCase;
 use PUGX\FilterBundle\Filter;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\Forms;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -118,5 +120,58 @@ final class FilterTest extends TestCase
         $this->filter->sort('foo', 'bar');
         $filter = $this->filter->filter('foo');
         self::assertArrayHasKey('_sort', $filter);
+    }
+
+    public function testSaveFilterWithQueryMethod(): void
+    {
+        $request = Request::create('/', 'QUERY', [], [], [], ['CONTENT_TYPE' => 'application/x-www-form-urlencoded'], 'stub%5Bname%5D=bar');
+        $filter = $this->createQueryFilter($request);
+        self::assertTrue($filter->saveFilter(QueryStubFormType::class, 'foo'));
+        self::assertSame(['name' => 'bar'], $filter->filter('foo'));
+    }
+
+    public function testSaveFilterWithQueryMethodOverride(): void
+    {
+        $request = Request::create('/', 'POST', ['_method' => 'QUERY', 'stub' => ['name' => 'bar']]);
+        $filter = $this->createQueryFilter($request);
+        self::assertTrue($filter->saveFilter(QueryStubFormType::class, 'foo'));
+        self::assertSame(['name' => 'bar'], $filter->filter('foo'));
+    }
+
+    public function testSaveFilterWithQueryMethodIgnoresOtherMethods(): void
+    {
+        $request = Request::create('/', 'GET', ['submit-filter' => '', 'stub' => ['name' => 'bar']]);
+        $filter = $this->createQueryFilter($request);
+        self::assertFalse($filter->saveFilter(QueryStubFormType::class, 'foo'));
+        $request = Request::create('/', 'POST', ['stub' => ['name' => 'bar']]);
+        $filter = $this->createQueryFilter($request);
+        self::assertFalse($filter->saveFilter(QueryStubFormType::class, 'foo'));
+        self::assertSame([], $filter->filter('foo'));
+    }
+
+    public function testSaveFilterWithQueryMethodWithoutFormData(): void
+    {
+        $request = Request::create('/', 'QUERY', [], [], [], [], 'other=bar');
+        $filter = $this->createQueryFilter($request);
+        self::assertFalse($filter->saveFilter(QueryStubFormType::class, 'foo'));
+    }
+
+    public function testSaveFilterWithGetMethodStillWorks(): void
+    {
+        $request = Request::create('/', 'GET', ['submit-filter' => '', 'stub' => ['name' => 'bar']]);
+        $filter = $this->createQueryFilter($request);
+        self::assertTrue($filter->saveFilter(QueryStubFormType::class, 'foo', [], ['method' => 'GET']));
+        self::assertSame(['name' => 'bar'], $filter->filter('foo'));
+    }
+
+    private function createQueryFilter(Request $request): Filter
+    {
+        $request->setSession(new Session(new MockArraySessionStorage()));
+        $stack = new RequestStack();
+        $stack->push($request);
+
+        $factory = Forms::createFormFactoryBuilder()->addExtension(new HttpFoundationExtension())->getFormFactory();
+
+        return new Filter($factory, $stack);
     }
 }

@@ -20,7 +20,7 @@ No configuration is required.
 
 Inject the provided service in your controller and use it with a form.
 
-Your form should use `GET` as method, use some fields that make sense on your list of items,
+Your form should use `QUERY` (see below) or `GET` as method, use some fields that make sense on your list of items,
 and **not** use CSRF protection.
 
 The first step is saving the filter with a name (if the form is submitted). Then, you can get
@@ -89,6 +89,29 @@ class FooFilterType extends AbstractType
 }
 
 ```
+
+## QUERY Method
+
+The [QUERY](https://httpwg.org/http-extensions/draft-ietf-httpbis-safe-method-w-body.html) method
+is the preferred one: it's safe like `GET`, but filter values travel in the request body
+instead of the URL. `GET` is still supported and stays the default of `AbstractFilterType`.
+
+To use it, set `QUERY` as method of your form:
+
+```php
+$resolver->setDefaults([
+    'csrf_protection' => false,
+    'method' => 'QUERY',
+]);
+```
+
+No changes are needed in your controller, except for the accepted methods.
+
+Browsers can't submit a form with `QUERY` method, so Symfony renders it as `POST` with
+a hidden `_method` field. The bundle accepts both:
+
+* a real `QUERY` request, sent by the provided JavaScript helper (see below)
+* the `POST` fallback, when JavaScript is not available
 
 ## Sorting
 
@@ -171,6 +194,11 @@ $(document).ready(function () {
 The basic results will be that the icon in the toggle button will be toggled along,
 and the arrow will point to the right when filters are shown (and back to the bottom when
 the filters are collapsed).
+If the form uses the `QUERY` method, it will be submitted with a real `QUERY` request.
+When the filter is saved, the current page is reloaded: the redirect destination of your
+controller is ignored, since JavaScript can't read it. If you redirect elsewhere (e.g. dropping
+the page number), don't use the helper on that form: the `POST` fallback follows the redirect.
+If the `QUERY` request fails, the form is submitted again with the `POST` fallback.
 
 You can pass an option object to `pugxFilter` function.
 
