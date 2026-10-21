@@ -17,6 +17,9 @@ use Symfony\Contracts\Service\ResetInterface;
  */
 final class Filter implements ResetInterface
 {
+    // Request::METHOD_QUERY is not available before Symfony 7.4
+    private const METHOD_QUERY = 'QUERY';
+
     /** @var array<string, FormInterface> */
     private array $forms = [];
 
@@ -91,12 +94,47 @@ final class Filter implements ResetInterface
 
             return true;
         }
+        if (self::METHOD_QUERY === \strtoupper($this->forms[$name]->getConfig()->getMethod())) {
+            return $this->saveQueryFilter($name);
+        }
         if (!$this->getRequest()->query->has('submit-filter')) {
             return false;
         }
         $this->forms[$name]->handleRequest($this->getRequest());
         if ($this->forms[$name]->isSubmitted() && $this->forms[$name]->isValid()) {
             $this->getSession()->set('filter.'.$name, $this->getRequest()->query->all()[$this->forms[$name]->getName()]);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Values come from the request body, sent either with a real QUERY request
+     * or with a POST request overridden by "_method" (what form_start() renders).
+     * The form is submitted manually: Symfony < 7.4 doesn't know the QUERY method,
+     * nor parses its body.
+     */
+    private function saveQueryFilter(string $name): bool
+    {
+        $request = $this->getRequest();
+        $method = $request->getRealMethod();
+        if (self::METHOD_QUERY !== $method && !('POST' === $method && self::METHOD_QUERY === \strtoupper((string) $request->request->get('_method')))) {
+            return false;
+        }
+        $body = $request->request->all();
+        if ([] === $body && '' !== ($content = $request->getContent())) {
+            \parse_str($content, $body);
+        }
+        $formName = $this->forms[$name]->getName();
+        if (!isset($body[$formName]) || !\is_array($body[$formName])) {
+            return false;
+        }
+        /** @var array<string, mixed> $values */
+        $values = $body[$formName];
+        if ($this->forms[$name]->submit($values)->isValid()) {
+            $this->getSession()->set('filter.'.$name, $values);
 
             return true;
         }
