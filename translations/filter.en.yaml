@@ -1,3 +1,5 @@
 filter: filter
 reset: reset filters
 show_hide: show/hide filters
+filters: filters
+active: active

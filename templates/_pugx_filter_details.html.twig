@@ -1,0 +1,14 @@
+{# no CSS framework nor JavaScript: native <details>, open while a filter is active #}
+<details class="filter"{% if filter_has(name) %} open{% endif %}>
+    <summary>
+        {{ 'filters'|trans({}, 'filter') }}
+        {% if filter_has(name) %}<span class="filter-active">({{ 'active'|trans({}, 'filter') }})</span>{% endif %}
+    </summary>
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <p class="filter-actions">
+            <button type="submit" name="submit-filter" data-filter>{{ 'filter'|trans({}, 'filter') }}</button>
+            <a href="?reset-filter" data-reset-filter>{{ 'reset'|trans({}, 'filter') }}</a>
+        </p>
+    {{ form_end(form) }}
+</details>
